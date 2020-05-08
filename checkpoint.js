@@ -42,25 +42,42 @@ const {
 // Pista: utilizar typeof para determinar si el valor de una propiedad es un objeto para aplicar
 // allí la recursión
 
-var objContains = function(obj, prop, value){
- 
+var objContains = function (obj, prop, value) {
+
+
+  for (var prop in obj) {
+    if (Object.keys(prop) == value) return true;
+
+    if (typeof prop === "object") return objContains(obj, prop, value)
+
+  }
+  return false;
+
+  // EJERCICIO 2
+  // Implementar la función countArray: a partir de un array en el cual cada posición puede ser un único
+  // número u otro array anidado de números, determinar la suma de todos los números contenidos en el array.
+  // El array será recibido por parámetro.
+  // Ejemplo:
+  //    const array = [1, [2, [3,4]], [5,6], 7];
+  //    countArray(array); --> Debería devolver 28 (1 + 2 + 3 + 4 + 5 + 6 + 7)
+  // Pista: utilizar el método Array.isArray() para determinar si algun elemento de array es un array anidado
+  // [Para más información del método: https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/isArray]
 }
+var countArray = function (array) {
 
 
-// EJERCICIO 2
-// Implementar la función countArray: a partir de un array en el cual cada posición puede ser un único
-// número u otro array anidado de números, determinar la suma de todos los números contenidos en el array.
-// El array será recibido por parámetro.
-// Ejemplo:
-//    const array = [1, [2, [3,4]], [5,6], 7];
-//    countArray(array); --> Debería devolver 28 (1 + 2 + 3 + 4 + 5 + 6 + 7)
-// Pista: utilizar el método Array.isArray() para determinar si algun elemento de array es un array anidado
-// [Para más información del método: https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/isArray]
+ if (array.length === 0) return 0;
 
-var countArray = function(array){
-  
+  let suma = 0;
+  array.forEach((elemento) => {
+    if (Array.isArray(elemento)) {
+      suma += countArray(elemento);
+    } else {
+      suma += elemento;
+    }
+  })
+  return suma;
 }
-
 // ---------------------
 
 // ----- LinkedList -----
@@ -77,11 +94,18 @@ var countArray = function(array){
 //    lista.add(3);
 //    lista.size(); --> 3
 
-LinkedList.prototype.size = function(){
- 
+LinkedList.prototype.size = function () {
+  var sumatoria=0;
+  var current = this.head;
+  while(current != null){
+    sumatoria ++;
+    current = current.next;
+
+  }
+  return sumatoria;
+    
+
 }
-
-
 // EJERCICIO 4
 // Implementar el método addInPos dentro del prototype de LinkedList que deberá agregar un elemento en
 // la posición indicada. Ambos datos serán brindados como parámetro (pos, value). Donde "pos" será la
@@ -98,9 +122,20 @@ LinkedList.prototype.size = function(){
 //    lista.addInPos(2, 3); --> Debería devolver false ya que no es posible agregar en la posición 2
 //    sin antes tener cargada la posición 0 y 1.
 
-LinkedList.prototype.addInPos = function(pos, value){
+LinkedList.prototype.addInPos = function (pos, value) {
+ 
+  if(pos == null) return false;
+
   
+
 }
+
+ 
+
+
+
+
+
 
 // EJERCICIO 5
 // Implementar el método reverse dentro del prototype de LinkedList que invierta el orden de la lista
@@ -109,8 +144,11 @@ LinkedList.prototype.addInPos = function(pos, value){
 //    Lista original: Head --> 1 --> 4 --> 10 --> 13 --> null
 //    Lista nueva luego de aplicar el reverse: Head --> 13 --> 10 --> 4 --> 1 --> null
 
-LinkedList.prototype.reverse = function(){
- 
+LinkedList.prototype.reverse = function () {
+
+
+
+
 }
 
 
@@ -140,7 +178,7 @@ LinkedList.prototype.reverse = function(){
 //    - mazoUserA = [2,10,11]
 //    - mazoUserB = [6,9,10,3,6,4]
 
-var cardGame = function(mazoUserA, mazoUserB){
+var cardGame = function (mazoUserA, mazoUserB) {
 
 }
 
@@ -163,8 +201,8 @@ var cardGame = function(mazoUserA, mazoUserB){
 //      \
 //       5
 
-var generateBST = function(array){
- 
+var generateBST = function (array) {
+
 }
 
 
@@ -186,7 +224,7 @@ var generateBST = function(array){
 
 var binarySearch = function (array, target) {
 
-  
+
 }
 
 // EJERCICIO 9
@@ -198,8 +236,8 @@ var binarySearch = function (array, target) {
 //     selectionSort([1, 6, 2, 5, 3, 4]) --> [1, 2, 3, 4, 5, 6]
 
 
-var selectionSort = function(array) {
-  
+var selectionSort = function (array) {
+
 }
 
 // ----- Closures -----
@@ -217,7 +255,7 @@ var selectionSort = function(array) {
 //    sumaDiez(11); --> Devolverá 21 (Ya que 11 + 10 = 21)
 
 function closureSum(numFijo) {
- 
+
 }
 
 // -------------------
@@ -232,8 +270,8 @@ function closureSum(numFijo) {
 //    const anagrams = allAnagrams('abc');
 //    console.log(anagrams); // [ 'abc', 'acb', 'bac', 'bca', 'cab', 'cba' ]
 
-var allAnagrams = function(string, array, index) {
- 
+var allAnagrams = function (string, array, index) {
+
 };
 
 module.exports = {
