@@ -45,11 +45,18 @@ const {
 var objContains = function (obj, prop, value) {
 
 
-  for (var prop in obj) {
-    if (Object.keys(prop) == value) return true;
-
-    if (typeof prop === "object") return objContains(obj, prop, value)
-
+  for (var i in obj) {
+    if (i == prop) {
+      if (obj[`${prop}`] === value) {
+        return true;
+      }
+    }
+    else if (typeof obj[i] == "object") {
+      var result = objContains(obj[i], prop, value);
+      if (result) {
+        return result;
+      }
+    }
   }
   return false;
 
@@ -66,7 +73,7 @@ var objContains = function (obj, prop, value) {
 var countArray = function (array) {
 
 
- if (array.length === 0) return 0;
+  if (array.length === 0) return 0;
 
   let suma = 0;
   array.forEach((elemento) => {
@@ -95,15 +102,15 @@ var countArray = function (array) {
 //    lista.size(); --> 3
 
 LinkedList.prototype.size = function () {
-  var sumatoria=0;
+  var sumatoria = 0;
   var current = this.head;
-  while(current != null){
-    sumatoria ++;
+  while (current != null) {
+    sumatoria++;
     current = current.next;
 
   }
   return sumatoria;
-    
+
 
 }
 // EJERCICIO 4
@@ -123,14 +130,24 @@ LinkedList.prototype.size = function () {
 //    sin antes tener cargada la posición 0 y 1.
 
 LinkedList.prototype.addInPos = function (pos, value) {
- 
-  if(pos == null) return false;
+  var node = new Node(value);
+  if(this.head === null){
+    return false;
+  }
+  let iterador = 1;
+  let curr = this.head;
+  while(curr.next != null && iterador < pos){
+    curr = curr.next; iterador++;
+  }
+  node.next = curr.next;
+  curr.next = node;
+  return true;
 
-  
+
 
 }
 
- 
+
 
 
 
@@ -146,10 +163,27 @@ LinkedList.prototype.addInPos = function (pos, value) {
 
 LinkedList.prototype.reverse = function () {
 
+  var curr = this.head;
+  var next = null;
+  var prev = null;
+
+  while (curr) {
+    next = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = next;
+  }
+  this.head = prev;
+  var linkedListInvertido = new LinkedList();
+  linkedListInvertido.head = prev;
+
+  return linkedListInvertido;
+
 
 
 
 }
+
 
 
 // ----------------------
@@ -180,7 +214,9 @@ LinkedList.prototype.reverse = function () {
 
 var cardGame = function (mazoUserA, mazoUserB) {
 
+
 }
+
 
 // ---------------
 
@@ -201,10 +237,24 @@ var cardGame = function (mazoUserA, mazoUserB) {
 //      \
 //       5
 
+function insertNode(tree, value) {
+  var node = tree,
+    key;
+  while (node.value !== value) {
+    key = value < node.value ? 'left' : 'right';
+    if (!node[key]) {
+      node[key] = new Node(value);
+      break;
+    }
+    node = node[key];
+  }
+  return tree;
+}
 var generateBST = function (array) {
 
+  tree = array.reduce((t, v) => t ? insertNode(t, v) : new Node(v), null);
+  return tree;
 }
-
 
 // ---------------
 
@@ -223,8 +273,29 @@ var generateBST = function (array) {
 
 
 var binarySearch = function (array, target) {
+  let inicio = 0;
+  let endIndex = array.length - 1;
+  if (array.length === null) {
+    return -1
+  }
+  while (inicio <= endIndex) {
+    let middleIndex = Math.floor((inicio + endIndex) / 2);
+    if (target === array[middleIndex]) {
+      return middleIndex;
+    }
+    if (target > array[middleIndex]) {
 
+     inicio = middleIndex + 1;
+    }
+    if (target < array[middleIndex]) {
 
+      endIndex = middleIndex - 1;
+
+    } else {
+      return -1;
+    }
+
+  }
 }
 
 // EJERCICIO 9
@@ -237,6 +308,20 @@ var binarySearch = function (array, target) {
 
 
 var selectionSort = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    var min = i;
+    for (var j = i + 1; j < array.length; j++) {
+      if (array[j] < array[min]) {
+        min = j;
+      }
+    }
+    var temp = array[i];
+    array[i] = array[min];
+    array[min] = temp;
+  }
+  return array;
+
+
 
 }
 
@@ -256,7 +341,15 @@ var selectionSort = function (array) {
 
 function closureSum(numFijo) {
 
+  var numero = numFijo;
+  function sumatoria(y) {
+    return numero + y;
+  }
+  return sumatoria;
 }
+
+
+
 
 // -------------------
 
@@ -270,7 +363,31 @@ function closureSum(numFijo) {
 //    const anagrams = allAnagrams('abc');
 //    console.log(anagrams); // [ 'abc', 'acb', 'bac', 'bca', 'cab', 'cba' ]
 
-var allAnagrams = function (string, array, index) {
+var allAnagrams = function (str, index, buffer) {
+  if (typeof str == "string")
+        str = str.split("");
+    if (typeof index == "undefined")
+        index = 0;
+    if (typeof buffer == "undefined")
+        buffer = [];
+    if (index >= str.length)
+        return buffer;
+    for (var i = index; i < str.length; i++)
+        buffer.push(ToggleLetters(str, index, i));
+    return FindAllPermutations(str, index + 1, buffer);
+}
+
+function ToggleLetters(str, index1, index2) {
+    if (index1 != index2) {
+        var temp = str[index1];
+        str[index1] = str[index2];
+        str[index2] = temp;
+    }
+    return str.join("");
+
+
+  
+
 
 };
 
